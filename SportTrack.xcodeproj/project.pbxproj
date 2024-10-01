@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B9D6AB6D2CAB027C00859087 /* SwiftNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = B9D6AB6C2CAB027C00859087 /* SwiftNavigation */; };
+		B9D6AB6F2CAB027C00859087 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = B9D6AB6E2CAB027C00859087 /* SwiftUINavigation */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		B9D6AB322CAAD75900859087 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9D6AB6F2CAB027C00859087 /* SwiftUINavigation in Frameworks */,
+				B9D6AB6D2CAB027C00859087 /* SwiftNavigation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +119,8 @@
 			);
 			name = SportTrack;
 			packageProductDependencies = (
+				B9D6AB6C2CAB027C00859087 /* SwiftNavigation */,
+				B9D6AB6E2CAB027C00859087 /* SwiftUINavigation */,
 			);
 			productName = SportTrack;
 			productReference = B9D6AB1F2CAAD75700859087 /* SportTrack.app */;
@@ -195,6 +204,9 @@
 			);
 			mainGroup = B9D6AB162CAAD75700859087;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B9D6AB6B2CAB027C00859087 /* XCRemoteSwiftPackageReference "swift-navigation" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B9D6AB202CAAD75700859087 /* Products */;
 			projectDirPath = "";
@@ -558,6 +570,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B9D6AB6B2CAB027C00859087 /* XCRemoteSwiftPackageReference "swift-navigation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-navigation";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B9D6AB6C2CAB027C00859087 /* SwiftNavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9D6AB6B2CAB027C00859087 /* XCRemoteSwiftPackageReference "swift-navigation" */;
+			productName = SwiftNavigation;
+		};
+		B9D6AB6E2CAB027C00859087 /* SwiftUINavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9D6AB6B2CAB027C00859087 /* XCRemoteSwiftPackageReference "swift-navigation" */;
+			productName = SwiftUINavigation;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B9D6AB172CAAD75700859087 /* Project object */;
 }
