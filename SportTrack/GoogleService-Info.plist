@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCWeg3PlwBQ7vRMQSt3olj9sOFMmCYltW0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>561710711837</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.tomasbabulak.SportTrack</string>
+	<key>PROJECT_ID</key>
+	<string>sporttrack-2ff70</string>
+	<key>STORAGE_BUCKET</key>
+	<string>sporttrack-2ff70.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:561710711837:ios:8a64aa01fd4209455072f4</string>
+</dict>
+</plist>
