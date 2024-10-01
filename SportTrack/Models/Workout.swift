@@ -6,20 +6,27 @@
 //
 
 import Foundation
+import SwiftUI
 import SwiftData
 
-@Model
-class Workout {
+struct Workout: Identifiable, Equatable {
+    let id: UUID
     /// Workout created
-    @Attribute(.unique) var timestamp: Date
+    let timestamp: Date
     /// Location
-    var location: String
+    let location: String
     /// Duration in seconds
-    var duration: Int
+    let duration: Duration
+    /// Storage type
+    let storage: StorageType
 
-    init(timestamp: Date, location: String, duration: Int) {
-        self.timestamp = timestamp
-        self.location = location
-        self.duration = duration
+
+    var backgroundColor: Color {
+        switch storage {
+        case .local:
+            return .gray.opacity(0.2)
+        case .cloud:
+            return .blue.opacity(0.2)
+        }
     }
 }

@@ -51,11 +51,10 @@ struct HomeView: View {
             ForEach(viewModel.workouts) { workout in
                 WorkoutCell(
                     configuration: WorkoutCellConfiguration(
-                        workout: workout,
-                        storageType: .cloud
+                        workout: workout
                     )
                 )
-                .listRowBackground(Color.green)
+                .listRowBackground(workout.backgroundColor)
             }
             .onDelete(perform: viewModel.deleteItems)
         }
@@ -79,8 +78,6 @@ struct HomeView: View {
 
 #Preview {
     HomeView(
-        viewModel: HomeViewModel(
-            dependencies: AppDependencies(databaseService: ProductionDatabaseService())
-        )
+        viewModel: HomeViewModel()
     )
 }
