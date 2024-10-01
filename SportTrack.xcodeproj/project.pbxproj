@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B9D5B5872CAC446300C1AAB7 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = B9D5B5862CAC446300C1AAB7 /* Dependencies */; };
 		B9D6AB6D2CAB027C00859087 /* SwiftNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = B9D6AB6C2CAB027C00859087 /* SwiftNavigation */; };
 		B9D6AB6F2CAB027C00859087 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = B9D6AB6E2CAB027C00859087 /* SwiftUINavigation */; };
 /* End PBXBuildFile section */
@@ -57,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9D5B5872CAC446300C1AAB7 /* Dependencies in Frameworks */,
 				B9D6AB6F2CAB027C00859087 /* SwiftUINavigation in Frameworks */,
 				B9D6AB6D2CAB027C00859087 /* SwiftNavigation in Frameworks */,
 			);
@@ -121,6 +123,7 @@
 			packageProductDependencies = (
 				B9D6AB6C2CAB027C00859087 /* SwiftNavigation */,
 				B9D6AB6E2CAB027C00859087 /* SwiftUINavigation */,
+				B9D5B5862CAC446300C1AAB7 /* Dependencies */,
 			);
 			productName = SportTrack;
 			productReference = B9D6AB1F2CAAD75700859087 /* SportTrack.app */;
@@ -206,6 +209,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				B9D6AB6B2CAB027C00859087 /* XCRemoteSwiftPackageReference "swift-navigation" */,
+				B9D5B5852CAC446300C1AAB7 /* XCRemoteSwiftPackageReference "swift-dependencies" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B9D6AB202CAAD75700859087 /* Products */;
@@ -572,6 +576,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		B9D5B5852CAC446300C1AAB7 /* XCRemoteSwiftPackageReference "swift-dependencies" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-dependencies";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.1;
+			};
+		};
 		B9D6AB6B2CAB027C00859087 /* XCRemoteSwiftPackageReference "swift-navigation" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-navigation";
@@ -583,6 +595,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		B9D5B5862CAC446300C1AAB7 /* Dependencies */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9D5B5852CAC446300C1AAB7 /* XCRemoteSwiftPackageReference "swift-dependencies" */;
+			productName = Dependencies;
+		};
 		B9D6AB6C2CAB027C00859087 /* SwiftNavigation */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B9D6AB6B2CAB027C00859087 /* XCRemoteSwiftPackageReference "swift-navigation" */;
