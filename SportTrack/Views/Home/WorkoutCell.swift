@@ -9,7 +9,6 @@ import SwiftUI
 
 struct WorkoutCellConfiguration {
     let workout: Workout
-    let storageType: StorageType
 
     let timesFormat: Date.FormatStyle = {
         Date.FormatStyle(date: .numeric, time: .standard)
@@ -30,7 +29,7 @@ struct WorkoutCell: View {
                     .font(.headline)
                     .fontWeight(.semibold)
 
-                Text("It took: \(Duration.seconds(configuration.workout.duration), format: configuration.durationFormat)")
+                Text("It took: \(configuration.workout.duration, format: configuration.durationFormat)")
                     .font(.body)
 
                 Text("Created at \(configuration.workout.timestamp, format: configuration.timesFormat)")
@@ -44,7 +43,7 @@ struct WorkoutCell: View {
     }
 
     var icon: Image {
-        switch configuration.storageType {
+        switch configuration.workout.storage {
         case .local:
             AppSymbol.externaldrive.body
         case .cloud:
@@ -56,8 +55,7 @@ struct WorkoutCell: View {
 #Preview {
     WorkoutCell(
         configuration: WorkoutCellConfiguration(
-            workout: Workout(timestamp: Date(), location: "Here", duration: 3),
-            storageType: .cloud
+            workout: Workout(id: UUID(), timestamp: Date(), location: "Here", duration: .seconds(3), storage: .cloud)
         )
     )
 }

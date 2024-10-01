@@ -9,9 +9,13 @@ import Foundation
 import SwiftData
 import SwiftUI
 import SwiftNavigation
+import Dependencies
 
 @Observable
 final class HomeViewModel {
+    @ObservationIgnored
+    @Dependency(DatabaseService.self) var databaseService
+
     var destination: Destination?
 
     @CasePathable
@@ -20,15 +24,13 @@ final class HomeViewModel {
     }
 
     private(set) var workouts: [Workout] = []
-    let dependencies: AppDependencies
 
-    init(dependencies: AppDependencies) {
-        self.dependencies = dependencies
+    init() {
         fetchLocations()
     }
 
     func fetchLocations() {
-        workouts = dependencies.databaseService.workouts
+        workouts = databaseService.workouts
     }
 
     func addItemTapped() {
@@ -39,11 +41,9 @@ final class HomeViewModel {
 
     func createWorkoutResultHandler(_ handler: CreateWorkoutViewModel.WorkoutResultHandler) {
         switch handler {
-        case let .created(workout, type) where type == .cloud:
-            dependencies.databaseService.add(workout: workout)
-            fetchLocations()
-        case let .created(workout, _):
-            dependencies.databaseService.add(workout: workout)
+        case let .created(workout) where workout.storage == .cloud:
+        case let .created(workout):
+            databaseService.add(workout: workout)
             fetchLocations()
         case .cancelled:
             break
@@ -53,18 +53,8 @@ final class HomeViewModel {
 
     func deleteItems(offsets: IndexSet) {
         for index in offsets {
-            dependencies.databaseService.remove(workout: workouts[index])
+            databaseService.remove(workout: workouts[index])
         }
         fetchLocations()
     }
-
-//    func     var backgroundColor: Color {
-//        switch storageType {
-//        case .local:
-//            return .gray.opacity(0.2)
-//        case .cloud:
-//            return .blue.opacity(0.2)
-//        }
-//    }
-
 }
