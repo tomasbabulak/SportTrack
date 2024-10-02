@@ -55,7 +55,14 @@ struct WorkoutCell: View {
 #Preview {
     WorkoutCell(
         configuration: WorkoutCellConfiguration(
-            workout: Workout(id: UUID(), timestamp: Date(), location: "Here", duration: .seconds(3), storage: .cloud)
+            workout: Workout(
+                id: UUID(),
+                timestamp: Date(),
+                type: "Running",
+                location: "Here",
+                duration: .seconds(3),
+                storage: .cloud
+            )
         )
     )
 }

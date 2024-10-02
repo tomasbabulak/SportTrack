@@ -65,6 +65,7 @@ final class CreateWorkoutViewModel: Identifiable {
         let workout = Workout(
             id: uuid(),
             timestamp: now,
+            type: workoutType,
             location: location,
             duration: .seconds(selectedHours * 3600 + selectedMinutes * 60),
             storage: isCloud ? .cloud : .local

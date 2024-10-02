@@ -50,7 +50,7 @@ struct CreateWorkoutView: View {
         .navigationTitle("New Workout")
         .alert(
             "Missing fields",
-            isPresented: Binding($viewModel.destination.locationAlert),
+            isPresented: Binding($viewModel.destination.inputWarning),
             actions: {
                 Button("Okay", role: .cancel) { }
             },
