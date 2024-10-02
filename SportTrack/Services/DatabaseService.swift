@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftData
-import Dependencies
 
 @Model
 class DatabaseWorkout {
@@ -34,11 +33,15 @@ class DatabaseWorkout {
     }
 }
 
-extension DatabaseService: DependencyKey {
-  static let liveValue = DatabaseService()
+protocol DatabaseServiceProtocol {
+    var workouts: [Workout] { get }
+
+    func add(_ workout: Workout) throws
+    func remove(_ workout: Workout) throws
+    func reloadAllFetched() throws
 }
 
-final class DatabaseService {
+final class DatabaseService: DatabaseServiceProtocol {
     private var container: ModelContainer
     private var context: ModelContext
 
@@ -82,12 +85,12 @@ final class DatabaseService {
         databaseWorkouts = workouts
     }
 
-    func add(workout: Workout) throws {
+    func add(_ workout: Workout) throws {
         context.insert(DatabaseWorkout(from: workout))
         try context.save()
     }
 
-    func remove(workout: Workout) throws {
+    func remove(_ workout: Workout) throws {
         guard let databaseWorkout = databaseWorkouts.first(where: { $0.localId == workout.id }) else {
             assertionFailure("Could not find database workout!")
             return

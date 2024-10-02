@@ -17,9 +17,7 @@ final class CreateWorkoutViewModel: Identifiable {
     @ObservationIgnored
     @Dependency(\.uuid) var uuid
     @ObservationIgnored
-    @Dependency(DatabaseService.self) var databaseService
-    @ObservationIgnored
-    @Dependency(NetworkService.self) var networkService
+    @Dependency(StorageService.self) var storageService
 
     var destination: Destination?
 
@@ -53,7 +51,7 @@ final class CreateWorkoutViewModel: Identifiable {
         guard
             !location.isEmpty
         else {
-            destination = .locationAlert
+            await MainActor.run { destination = .locationAlert }
             return
         }
         let workout = Workout(
@@ -73,13 +71,7 @@ final class CreateWorkoutViewModel: Identifiable {
     func createWorkout(workout: Workout) async {
         do {
             await MainActor.run { destination = .loading }
-            switch workout.storage {
-            case .cloud:
-                try await networkService.postWorkouts(workout: workout)
-            case .local:
-                try databaseService.add(workout: workout)
-                databaseService.reloadAllFetched()
-            }
+            try await storageService.store(workout: workout)
             await resultHandler(.created)
         } catch {
             NSLog("Could not create workout: \(error)")

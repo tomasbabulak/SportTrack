@@ -104,7 +104,7 @@ struct CreateWorkoutView: View {
     private var loadingView: some View {
         ZStack {
             Color.black.opacity(0.5)
-            ProgressView() { Text("Uploading") }
+            ProgressView { Text("Uploading") }
         }
     }
 }
