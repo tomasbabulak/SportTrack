@@ -70,6 +70,9 @@ struct HomeView: View {
                 }
                 .onDelete(perform: { offset in Task { await viewModel.deleteItems(offsets: offset) } })
             }
+            .refreshable {
+                await viewModel.fetchLocations()
+            }
         }
     }
 
