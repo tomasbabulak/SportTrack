@@ -25,7 +25,7 @@ struct WorkoutCell: View {
     var body: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 6) {
-                Text(configuration.workout.location)
+                Text("\(configuration.workout.type) @ \(configuration.workout.location)")
                     .font(.headline)
                     .fontWeight(.semibold)
 
@@ -34,6 +34,7 @@ struct WorkoutCell: View {
 
                 Text("Created at \(configuration.workout.timestamp, format: configuration.timesFormat)")
                     .font(.caption2)
+                    .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 

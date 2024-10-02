@@ -49,7 +49,7 @@ struct CreateWorkoutView: View {
         }
         .navigationTitle("New Workout")
         .alert(
-            "Missing fields",
+            "Missing data",
             isPresented: Binding($viewModel.destination.inputWarning),
             actions: {
                 Button("Okay", role: .cancel) { }
@@ -111,7 +111,7 @@ struct CreateWorkoutView: View {
                     Text("Store in cloud")
                 }
             )
-            Text("If you store in cloud, your workout will backed up to the cloud. Otherwise, it will be stored locally.")
+            Text("If you opt for cloud storage, your workout details will be securely backed up; otherwise, they will be kept on your device.")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)

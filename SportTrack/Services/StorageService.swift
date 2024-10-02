@@ -13,6 +13,11 @@ extension StorageService: DependencyKey {
         databaseService: DatabaseService(),
         networkService: NetworkService()
     )
+
+    static let previewValue = StorageService(
+        databaseService: DatabaseServiceMock(),
+        networkService: NetworkServiceMock()
+    )
 }
 
 final class StorageService {
