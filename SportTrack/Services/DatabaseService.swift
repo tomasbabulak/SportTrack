@@ -9,46 +9,45 @@ import Foundation
 import SwiftData
 import Dependencies
 
+@Model
+class DatabaseWorkout {
+    var localId: UUID
+    /// Workout created
+    var timestamp: Date
+    /// Location
+    var location: String
+    /// Duration in seconds
+    var duration: Int
+
+    init(localId: UUID, timestamp: Date, location: String, duration: Int) {
+        self.localId = localId
+        self.timestamp = timestamp
+        self.location = location
+        self.duration = duration
+    }
+
+    init(from workout: Workout) {
+        self.localId = workout.id
+        self.timestamp = workout.timestamp
+        self.location = workout.location
+        self.duration = Int(workout.duration.components.seconds)
+    }
+}
+
 extension DatabaseService: DependencyKey {
   static let liveValue = DatabaseService()
 }
 
 final class DatabaseService {
-    @Model
-    class DatabaseWorkout {
-        var id: UUID
-        /// Workout created
-        var timestamp: Date
-        /// Location
-        var location: String
-        /// Duration in seconds
-        var duration: Int
-
-        init(id: UUID, timestamp: Date, location: String, duration: Int) {
-            self.id = id
-            self.timestamp = timestamp
-            self.location = location
-            self.duration = duration
-        }
-
-        init(from workout: Workout) {
-            self.id = workout.id
-            self.timestamp = workout.timestamp
-            self.location = workout.location
-            self.duration = Int(workout.duration.components.seconds)
-        }
-    }
-
     private var container: ModelContainer
     private var context: ModelContext
 
+    private var databaseWorkouts: [DatabaseWorkout] = []
+
     var workouts: [Workout] {
-        let fetchDescriptor = FetchDescriptor<DatabaseWorkout>(
-            sortBy: [SortDescriptor(\.timestamp)]
-        )
-        return ((try? context.fetch(fetchDescriptor)) ?? []).map {
+        databaseWorkouts.map {
             Workout(
-                id: $0.id,
+                id: $0.localId,
                 timestamp: $0.timestamp,
                 location: $0.location,
                 duration: Duration.seconds($0.duration),
@@ -75,11 +74,25 @@ final class DatabaseService {
         self.context = ModelContext(container)
     }
 
-    func add(workout: Workout) {
-        context.insert(DatabaseWorkout(from: workout))
+    func reloadAllFetched() throws {
+        let fetchDescriptor = FetchDescriptor<DatabaseWorkout>(
+            sortBy: [SortDescriptor(\.timestamp)]
+        )
+        let workouts = try context.fetch(fetchDescriptor)
+        databaseWorkouts = workouts
     }
 
-    func remove(workout: Workout) {
-        context.delete(DatabaseWorkout(from: workout))
+    func add(workout: Workout) throws {
+        context.insert(DatabaseWorkout(from: workout))
+        try context.save()
+    }
+
+    func remove(workout: Workout) throws {
+        guard let databaseWorkout = databaseWorkouts.first(where: { $0.localId == workout.id }) else {
+            assertionFailure("Could not find database workout!")
+            return
+        }
+        context.delete(databaseWorkout)
+        try context.save()
     }
 }
