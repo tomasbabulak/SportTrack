@@ -22,7 +22,7 @@ struct CreateWorkoutView: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button(action: {
-                    viewModel.saveTapped()
+                    Task { await viewModel.saveTapped() }
                 }, label: {
                     Text("Save")
                 })
@@ -30,7 +30,7 @@ struct CreateWorkoutView: View {
 
             ToolbarItem(placement: .cancellationAction) {
                 Button(action: {
-                    viewModel.cancelTapped()
+                    Task { await viewModel.cancelTapped() }
                 }, label: {
                     Text("Cancel")
                 })
@@ -47,6 +47,23 @@ struct CreateWorkoutView: View {
                 Text("A workout must have a location.")
             }
         )
+        .alert(
+            "Could not save workout",
+            isPresented: Binding($viewModel.destination.failure),
+            actions: {
+                Button("Cancel", role: .cancel) { }
+                Button("Retry") { Task { await viewModel.saveTapped() } }
+            },
+            message: {
+                Text("Workout could not be saved.")
+            }
+        )
+        .overlay(content: {
+            if viewModel.destination == .loading {
+                loadingView
+            }
+        })
+        .animation(.default, value: viewModel.destination)
     }
 
     @ViewBuilder
@@ -82,6 +99,13 @@ struct CreateWorkoutView: View {
                 Text("Store in cloud")
             }
         )
+    }
+
+    private var loadingView: some View {
+        ZStack {
+            Color.black.opacity(0.5)
+            ProgressView() { Text("Uploading") }
+        }
     }
 }
 
