@@ -10,15 +10,26 @@ import SwiftUINavigation
 
 struct CreateWorkoutView: View {
     @State var viewModel: CreateWorkoutViewModel
+    @FocusState private var focus: CreateWorkoutViewModel.FormFocus?
 
     var body: some View {
         Form {
-            TextField("Enter Location", text: $viewModel.location)
+            TextField("Workout Type", text: $viewModel.workoutType)
+                .submitLabel(.next)
+                .focused($focus, equals: .workoutType)
+
+            TextField("Location", text: $viewModel.location)
+                .submitLabel(.done)
+                .focused($focus, equals: .workoutType)
 
             durationPicker
 
             storageTypePicker
         }
+        .onSubmit {
+            viewModel.textFieldSubmitTapped()
+        }
+        .bind($viewModel.formFocus, to: $focus)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button(action: {
@@ -38,13 +49,13 @@ struct CreateWorkoutView: View {
         }
         .navigationTitle("New Workout")
         .alert(
-            "Missing Location",
-            isPresented: Binding($viewModel.destination.locationAlert),
+            "Missing data",
+            isPresented: Binding($viewModel.destination.inputWarning),
             actions: {
                 Button("Okay", role: .cancel) { }
             },
             message: {
-                Text("A workout must have a location.")
+                Text("All fields need to be filled out.")
             }
         )
         .alert(
@@ -93,19 +104,25 @@ struct CreateWorkoutView: View {
     }
 
     private var storageTypePicker: some View {
-        Toggle(
-            isOn: $viewModel.isCloud,
-            label: {
-                Text("Store in cloud")
-            }
-        )
+        VStack {
+            Toggle(
+                isOn: $viewModel.isCloud,
+                label: {
+                    Text("Store in cloud")
+                }
+            )
+            Text("If you opt for cloud storage, your workout details will be securely backed up; otherwise, they will be kept on your device.")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 
     private var loadingView: some View {
-        ZStack {
-            Color.black.opacity(0.5)
-            ProgressView { Text("Uploading") }
-        }
+        ProgressView { Text("Saving...") }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(.ultraThinMaterial)
+            .ignoresSafeArea()
     }
 }
 

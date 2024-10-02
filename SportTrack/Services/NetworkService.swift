@@ -12,6 +12,8 @@ import FirebaseFirestore
 struct ApiWorkout: Codable {
     /// Workout created
     var timestamp: Date
+    /// Workout type
+    var type: String
     /// Location
     var location: String
     /// Duration in seconds
@@ -39,11 +41,25 @@ final class NetworkService: NetworkServiceProtocol {
         return try snapshot
             .documents
             .map { ($0.documentID, try $0.data(as: ApiWorkout.self)) }
-            .map { Workout(id: UUID(uuidString: $0)!, timestamp: $1.timestamp, location: $1.location, duration: .seconds($1.duration), storage: .cloud) }
+            .map {
+                Workout(
+                    id: UUID(uuidString: $0) ?? UUID(),
+                    timestamp: $1.timestamp,
+                    type: $1.type,
+                    location: $1.location,
+                    duration: .seconds($1.duration),
+                    storage: .cloud
+                )
+            }
     }
 
     func create(_ workout: Workout) async throws {
-        let apiWorkout = ApiWorkout(timestamp: workout.timestamp, location: workout.location, duration: Int(workout.duration.components.seconds))
+        let apiWorkout = ApiWorkout(
+            timestamp: workout.timestamp,
+            type: workout.type,
+            location: workout.location,
+            duration: Int(workout.duration.components.seconds)
+        )
         try workoutsColletion()
             .document(workout.id.uuidString)
             .setData(from: apiWorkout)

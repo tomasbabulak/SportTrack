@@ -13,6 +13,8 @@ struct Workout: Identifiable, Equatable {
     let id: UUID
     /// Workout created
     let timestamp: Date
+    /// Workout type
+    var type: String
     /// Location
     let location: String
     /// Duration in seconds

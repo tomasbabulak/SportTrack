@@ -23,7 +23,7 @@ final class CreateWorkoutViewModel: Identifiable {
 
     @CasePathable
     enum Destination {
-        case locationAlert
+        case inputWarning
         case failure
         case loading
     }
@@ -33,8 +33,15 @@ final class CreateWorkoutViewModel: Identifiable {
         case created
     }
 
+    enum FormFocus {
+        case workoutType
+        case location
+    }
+
     let resultHandler: (WorkoutResultHandler) async -> Void
 
+    var formFocus: FormFocus?
+    var workoutType: String = ""
     var location: String = ""
     var selectedHours: Int = 0
     var selectedMinutes: Int = 0
@@ -49,14 +56,16 @@ final class CreateWorkoutViewModel: Identifiable {
 
     func saveTapped() async {
         guard
-            !location.isEmpty
+            !location.isEmpty,
+            !workoutType.isEmpty
         else {
-            await MainActor.run { destination = .locationAlert }
+            await MainActor.run { destination = .inputWarning }
             return
         }
         let workout = Workout(
             id: uuid(),
             timestamp: now,
+            type: workoutType,
             location: location,
             duration: .seconds(selectedHours * 3600 + selectedMinutes * 60),
             storage: isCloud ? .cloud : .local
@@ -68,7 +77,18 @@ final class CreateWorkoutViewModel: Identifiable {
         await resultHandler(.cancelled)
     }
 
-    func createWorkout(workout: Workout) async {
+    func textFieldSubmitTapped() {
+        switch formFocus {
+        case .workoutType:
+            formFocus = .location
+        case .location:
+            formFocus = nil
+        case .none:
+            break
+        }
+    }
+
+    private func createWorkout(workout: Workout) async {
         do {
             await MainActor.run { destination = .loading }
             try await storageService.store(workout: workout)

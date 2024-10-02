@@ -8,11 +8,15 @@
 import Foundation
 import Dependencies
 
-
 extension StorageService: DependencyKey {
     static let liveValue = StorageService(
         databaseService: DatabaseService(),
         networkService: NetworkService()
+    )
+
+    static let previewValue = StorageService(
+        databaseService: DatabaseServiceMock(),
+        networkService: NetworkServiceMock()
     )
 }
 
@@ -31,7 +35,6 @@ final class StorageService {
             try await networkService.create(workout)
         case .local:
             try databaseService.add(workout)
-            try databaseService.reloadAllFetched()
         }
     }
 
@@ -41,7 +44,6 @@ final class StorageService {
             try await networkService.delete(workout)
         case .local:
             try databaseService.remove(workout)
-            try databaseService.reloadAllFetched()
         }
     }
 

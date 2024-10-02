@@ -13,13 +13,16 @@ class DatabaseWorkout {
     var localId: UUID
     /// Workout created
     var timestamp: Date
+    /// Workout type
+    var type: String
     /// Location
     var location: String
     /// Duration in seconds
     var duration: Int
 
-    init(localId: UUID, timestamp: Date, location: String, duration: Int) {
+    init(localId: UUID, timestamp: Date, type: String, location: String, duration: Int) {
         self.localId = localId
+        self.type = type
         self.timestamp = timestamp
         self.location = location
         self.duration = duration
@@ -28,6 +31,7 @@ class DatabaseWorkout {
     init(from workout: Workout) {
         self.localId = workout.id
         self.timestamp = workout.timestamp
+        self.type = workout.type
         self.location = workout.location
         self.duration = Int(workout.duration.components.seconds)
     }
@@ -52,6 +56,7 @@ final class DatabaseService: DatabaseServiceProtocol {
             Workout(
                 id: $0.localId,
                 timestamp: $0.timestamp,
+                type: $0.type,
                 location: $0.location,
                 duration: Duration.seconds($0.duration),
                 storage: .local
