@@ -8,22 +8,23 @@
 import Foundation
 import Firebase
 import FirebaseFirestore
-import Dependencies
 
-extension NetworkService: DependencyKey {
-  static let liveValue = NetworkService()
+struct ApiWorkout: Codable {
+    /// Workout created
+    var timestamp: Date
+    /// Location
+    var location: String
+    /// Duration in seconds
+    var duration: Int
 }
 
-final class NetworkService {
-    struct ApiWorkout: Codable {
-        /// Workout created
-        var timestamp: Date
-        /// Location
-        var location: String
-        /// Duration in seconds
-        var duration: Int
-    }
+protocol NetworkServiceProtocol {
+    func getWorkouts() async throws -> [Workout]
+    func create(_ workout: Workout) async throws
+    func delete(_ workout: Workout) async throws
+}
 
+final class NetworkService: NetworkServiceProtocol {
     let deviceId = UIDevice.current.identifierForVendor!.uuidString
     let db: Firestore
 
@@ -41,14 +42,14 @@ final class NetworkService {
             .map { Workout(id: UUID(uuidString: $0)!, timestamp: $1.timestamp, location: $1.location, duration: .seconds($1.duration), storage: .cloud) }
     }
 
-    func postWorkouts(workout: Workout) async throws {
+    func create(_ workout: Workout) async throws {
         let apiWorkout = ApiWorkout(timestamp: workout.timestamp, location: workout.location, duration: Int(workout.duration.components.seconds))
         try workoutsColletion()
             .document(workout.id.uuidString)
             .setData(from: apiWorkout)
     }
 
-    func deleteWorkouts(workout: Workout) async throws {
+    func delete(_ workout: Workout) async throws {
         try await workoutsColletion()
             .document(workout.id.uuidString)
             .delete()

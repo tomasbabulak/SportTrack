@@ -14,9 +14,7 @@ import Dependencies
 @Observable
 final class HomeViewModel {
     @ObservationIgnored
-    @Dependency(DatabaseService.self) var databaseService
-    @ObservationIgnored
-    @Dependency(NetworkService.self) var networkService
+    @Dependency(StorageService.self) var storageService
 
     var destination: Destination?
 
@@ -71,23 +69,18 @@ final class HomeViewModel {
     }
 
     func fetchLocations() async {
-        databaseService.reloadAllFetched()
-        let databaseWorkouts = databaseService.workouts
-        let cloudWorkouts: [Workout]
         do {
-            cloudWorkouts = try await networkService.getWorkouts()
+            workouts = try await storageService.getAll()
         } catch {
-            NSLog("Error while fetching workouts: \(error.localizedDescription)")
-            // TODO: Handle errors
-            cloudWorkouts = []
+            NSLog("Could not fetch workouts: \(error)")
         }
-
-        workouts = (databaseWorkouts + cloudWorkouts).sorted(by: { $0.timestamp > $1.timestamp })
     }
 
     func addItemTapped() {
         destination = .createWorkout(
-            CreateWorkoutViewModel(resultHandler: { [weak self] in await self?.createWorkoutResultHandler($0) })
+            CreateWorkoutViewModel(resultHandler: { [weak self] in
+                await self?.createWorkoutResultHandler($0)
+            })
         )
     }
 
@@ -105,13 +98,7 @@ final class HomeViewModel {
         for index in offsets {
             let workout = workouts[index]
             do {
-                switch workout.storage {
-                case .cloud:
-                    try await networkService.deleteWorkouts(workout: workout)
-                case .local:
-                    try databaseService.remove(workout: workout)
-                    databaseService.reloadAllFetched()
-                }
+                try await storageService.store(workout: workout)
             } catch {
                 NSLog("Could not delete workout: \(error)")
                 // TODO: Handle errors
