@@ -15,46 +15,108 @@ import Dependencies
 final class HomeViewModel {
     @ObservationIgnored
     @Dependency(DatabaseService.self) var databaseService
+    @ObservationIgnored
+    @Dependency(NetworkService.self) var networkService
 
     var destination: Destination?
 
     @CasePathable
     enum Destination {
         case createWorkout(CreateWorkoutViewModel)
+        case loading
     }
 
-    private(set) var workouts: [Workout] = []
+    enum WorkoutSelection: Int, CaseIterable {
+        case all, cloud, local
 
-    init() {
-        fetchLocations()
+        var description: String {
+            switch self {
+            case .all:
+                return "All"
+            case .cloud:
+                return "Cloud"
+            case .local:
+                return "Local"
+            }
+        }
     }
 
-    func fetchLocations() {
-        workouts = databaseService.workouts
+    private var workouts: [Workout] = []
+    var fileteredWorkouts: [Workout] {
+        switch selection {
+        case .all:
+            return workouts
+        case .cloud:
+            return workouts.filter { $0.storage == .cloud }
+        case .local:
+            return workouts.filter { $0.storage == .local }
+        }
+    }
+
+    var selection: WorkoutSelection = .all
+
+    var isLoading: Bool {
+        switch destination {
+        case .loading:
+            return true
+        default:
+            return false
+        }
+    }
+
+    func task() async {
+        await MainActor.run { destination = .loading }
+        await fetchLocations()
+        await MainActor.run { destination = nil }
+    }
+
+    func fetchLocations() async {
+        databaseService.reloadAllFetched()
+        let databaseWorkouts = databaseService.workouts
+        let cloudWorkouts: [Workout]
+        do {
+            cloudWorkouts = try await networkService.getWorkouts()
+        } catch {
+            NSLog("Error while fetching workouts: \(error.localizedDescription)")
+            // TODO: Handle errors
+            cloudWorkouts = []
+        }
+
+        workouts = (databaseWorkouts + cloudWorkouts).sorted(by: { $0.timestamp > $1.timestamp })
     }
 
     func addItemTapped() {
         destination = .createWorkout(
-            CreateWorkoutViewModel(resultHandler: { [weak self] in self?.createWorkoutResultHandler($0) })
+            CreateWorkoutViewModel(resultHandler: { [weak self] in await self?.createWorkoutResultHandler($0) })
         )
     }
 
-    func createWorkoutResultHandler(_ handler: CreateWorkoutViewModel.WorkoutResultHandler) {
+    func createWorkoutResultHandler(_ handler: CreateWorkoutViewModel.WorkoutResultHandler) async {
         switch handler {
-        case let .created(workout) where workout.storage == .cloud:
-        case let .created(workout):
-            databaseService.add(workout: workout)
-            fetchLocations()
+        case .created:
+            await fetchLocations()
         case .cancelled:
             break
         }
-        destination = nil
+        await MainActor.run { destination = nil }
     }
 
-    func deleteItems(offsets: IndexSet) {
+    func deleteItems(offsets: IndexSet) async {
         for index in offsets {
-            databaseService.remove(workout: workouts[index])
+            let workout = workouts[index]
+            do {
+                switch workout.storage {
+                case .cloud:
+                    try await networkService.deleteWorkouts(workout: workout)
+                case .local:
+                    try databaseService.remove(workout: workout)
+                    databaseService.reloadAllFetched()
+                }
+            } catch {
+                NSLog("Could not delete workout: \(error)")
+                // TODO: Handle errors
+            }
         }
-        fetchLocations()
+        await fetchLocations()
     }
 }

@@ -16,10 +16,7 @@ struct HomeView: View {
         NavigationSplitView {
             content
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        EditButton()
-                    }
-                    ToolbarItem {
+                    ToolbarItem(placement: .primaryAction) {
                         Button(
                             action: viewModel.addItemTapped,
                             label: {
@@ -33,35 +30,46 @@ struct HomeView: View {
             Text("Select workout")
         }
         .overlay {
-            if viewModel.workouts.isEmpty {
+            if viewModel.fileteredWorkouts.isEmpty {
                 noWorkoutsView
             }
         }
-        .animation(.default, value: viewModel.workouts)
+        .animation(.default, value: viewModel.fileteredWorkouts)
         .sheet(item: $viewModel.destination.createWorkout) { model in
             NavigationStack {
                 CreateWorkoutView(viewModel: model)
             }
         }
+        .task { await viewModel.task() }
     }
 
     @ViewBuilder
-    var content: some View {
-        List {
-            ForEach(viewModel.workouts) { workout in
-                WorkoutCell(
-                    configuration: WorkoutCellConfiguration(
-                        workout: workout
-                    )
-                )
-                .listRowBackground(workout.backgroundColor)
+    private var content: some View {
+        VStack {
+            Picker("Workout selection", selection: $viewModel.selection) {
+                ForEach(HomeViewModel.WorkoutSelection.allCases, id: \.self) { selection in
+                    Text(selection.description).tag(selection)
+                }
             }
-            .onDelete(perform: viewModel.deleteItems)
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+
+            List {
+                ForEach(viewModel.fileteredWorkouts) { workout in
+                    WorkoutCell(
+                        configuration: WorkoutCellConfiguration(
+                            workout: workout
+                        )
+                    )
+                    .listRowBackground(workout.backgroundColor)
+                }
+                .onDelete(perform: { offset in Task { await viewModel.deleteItems(offsets: offset) } })
+            }
         }
     }
 
     @ViewBuilder
-    var noWorkoutsView: some View {
+    private var noWorkoutsView: some View {
         ContentUnavailableView {
             Text("No workouts!")
         } description: {
