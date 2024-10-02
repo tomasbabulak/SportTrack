@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B9D5B5872CAC446300C1AAB7 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = B9D5B5862CAC446300C1AAB7 /* Dependencies */; };
+		B9D5B58A2CAC448600C1AAB7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B9D5B5892CAC448600C1AAB7 /* FirebaseFirestore */; };
 		B9D6AB6D2CAB027C00859087 /* SwiftNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = B9D6AB6C2CAB027C00859087 /* SwiftNavigation */; };
 		B9D6AB6F2CAB027C00859087 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = B9D6AB6E2CAB027C00859087 /* SwiftUINavigation */; };
 /* End PBXBuildFile section */
@@ -59,6 +60,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9D5B5872CAC446300C1AAB7 /* Dependencies in Frameworks */,
+				B9D5B58A2CAC448600C1AAB7 /* FirebaseFirestore in Frameworks */,
 				B9D6AB6F2CAB027C00859087 /* SwiftUINavigation in Frameworks */,
 				B9D6AB6D2CAB027C00859087 /* SwiftNavigation in Frameworks */,
 			);
@@ -124,6 +126,7 @@
 				B9D6AB6C2CAB027C00859087 /* SwiftNavigation */,
 				B9D6AB6E2CAB027C00859087 /* SwiftUINavigation */,
 				B9D5B5862CAC446300C1AAB7 /* Dependencies */,
+				B9D5B5892CAC448600C1AAB7 /* FirebaseFirestore */,
 			);
 			productName = SportTrack;
 			productReference = B9D6AB1F2CAAD75700859087 /* SportTrack.app */;
@@ -210,6 +213,7 @@
 			packageReferences = (
 				B9D6AB6B2CAB027C00859087 /* XCRemoteSwiftPackageReference "swift-navigation" */,
 				B9D5B5852CAC446300C1AAB7 /* XCRemoteSwiftPackageReference "swift-dependencies" */,
+				B9D5B5882CAC448600C1AAB7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B9D6AB202CAAD75700859087 /* Products */;
@@ -584,6 +588,14 @@
 				minimumVersion = 1.4.1;
 			};
 		};
+		B9D5B5882CAC448600C1AAB7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.3.0;
+			};
+		};
 		B9D6AB6B2CAB027C00859087 /* XCRemoteSwiftPackageReference "swift-navigation" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-navigation";
@@ -599,6 +611,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B9D5B5852CAC446300C1AAB7 /* XCRemoteSwiftPackageReference "swift-dependencies" */;
 			productName = Dependencies;
+		};
+		B9D5B5892CAC448600C1AAB7 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9D5B5882CAC448600C1AAB7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 		B9D6AB6C2CAB027C00859087 /* SwiftNavigation */ = {
 			isa = XCSwiftPackageProductDependency;

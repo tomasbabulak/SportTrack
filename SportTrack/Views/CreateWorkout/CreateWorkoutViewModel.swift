@@ -16,20 +16,26 @@ final class CreateWorkoutViewModel: Identifiable {
     @Dependency(\.date.now) var now
     @ObservationIgnored
     @Dependency(\.uuid) var uuid
+    @ObservationIgnored
+    @Dependency(DatabaseService.self) var databaseService
+    @ObservationIgnored
+    @Dependency(NetworkService.self) var networkService
 
     var destination: Destination?
 
     @CasePathable
     enum Destination {
-      case locationAlert
+        case locationAlert
+        case failure
+        case loading
     }
 
     enum WorkoutResultHandler {
         case cancelled
-        case created(Workout)
+        case created
     }
 
-    let resultHandler: (WorkoutResultHandler) -> Void
+    let resultHandler: (WorkoutResultHandler) async -> Void
 
     var location: String = ""
     var selectedHours: Int = 0
@@ -39,11 +45,11 @@ final class CreateWorkoutViewModel: Identifiable {
     let hoursRange: [Int] = Array(0...23)
     let minutesRange: [Int] = Array(0...59)
 
-    init(resultHandler: @escaping (WorkoutResultHandler) -> Void) {
+    init(resultHandler: @escaping (WorkoutResultHandler) async -> Void) {
         self.resultHandler = resultHandler
     }
 
-    func saveTapped() {
+    func saveTapped() async {
         guard
             !location.isEmpty
         else {
@@ -57,10 +63,27 @@ final class CreateWorkoutViewModel: Identifiable {
             duration: .seconds(selectedHours * 3600 + selectedMinutes * 60),
             storage: isCloud ? .cloud : .local
         )
-        resultHandler(.created(workout))
+        await createWorkout(workout: workout)
     }
 
-    func cancelTapped() {
-        resultHandler(.cancelled)
+    func cancelTapped() async {
+        await resultHandler(.cancelled)
+    }
+
+    func createWorkout(workout: Workout) async {
+        do {
+            await MainActor.run { destination = .loading }
+            switch workout.storage {
+            case .cloud:
+                try await networkService.postWorkouts(workout: workout)
+            case .local:
+                try databaseService.add(workout: workout)
+                databaseService.reloadAllFetched()
+            }
+            await resultHandler(.created)
+        } catch {
+            NSLog("Could not create workout: \(error)")
+            await MainActor.run { destination = .failure }
+        }
     }
 }
