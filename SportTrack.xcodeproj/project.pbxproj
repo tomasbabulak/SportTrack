@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		B9D5B5872CAC446300C1AAB7 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = B9D5B5862CAC446300C1AAB7 /* Dependencies */; };
 		B9D5B58A2CAC448600C1AAB7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B9D5B5892CAC448600C1AAB7 /* FirebaseFirestore */; };
+		B9D5B6252CAD851700C1AAB7 /* Documentation.docc in Sources */ = {isa = PBXBuildFile; fileRef = B9D5B6242CAD851700C1AAB7 /* Documentation.docc */; };
+		B9D5B6262CAD851700C1AAB7 /* Documentation.docc in Sources */ = {isa = PBXBuildFile; fileRef = B9D5B6242CAD851700C1AAB7 /* Documentation.docc */; };
 		B9D6AB6D2CAB027C00859087 /* SwiftNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = B9D6AB6C2CAB027C00859087 /* SwiftNavigation */; };
 		B9D6AB6F2CAB027C00859087 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = B9D6AB6E2CAB027C00859087 /* SwiftUINavigation */; };
 /* End PBXBuildFile section */
@@ -31,6 +33,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B9D5B6242CAD851700C1AAB7 /* Documentation.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Documentation.docc; sourceTree = "<group>"; };
 		B9D6AB1F2CAAD75700859087 /* SportTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SportTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9D6AB312CAAD75900859087 /* SportTrackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SportTrackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9D6AB3B2CAAD75900859087 /* SportTrackUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SportTrackUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +89,7 @@
 		B9D6AB162CAAD75700859087 = {
 			isa = PBXGroup;
 			children = (
+				B9D5B6242CAD851700C1AAB7 /* Documentation.docc */,
 				B9D6AB212CAAD75700859087 /* SportTrack */,
 				B9D6AB342CAAD75900859087 /* SportTrackTests */,
 				B9D6AB3E2CAAD75900859087 /* SportTrackUITests */,
@@ -256,6 +260,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9D5B6252CAD851700C1AAB7 /* Documentation.docc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9D5B6262CAD851700C1AAB7 /* Documentation.docc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
