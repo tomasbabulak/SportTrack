@@ -34,6 +34,11 @@ struct HomeView: View {
                 noWorkoutsView
             }
         }
+        .overlay(content: {
+            if viewModel.isLoading {
+                loadingView
+            }
+        })
         .animation(.default, value: viewModel.fileteredWorkouts)
         .sheet(item: $viewModel.destination.createWorkout) { model in
             NavigationStack {
@@ -80,6 +85,13 @@ struct HomeView: View {
                 label: { Text("Create Workout") }
             )
             .buttonStyle(.borderedProminent)
+        }
+    }
+
+    private var loadingView: some View {
+        ZStack {
+            Color.black
+            ProgressView { Text("Loading data...") }
         }
     }
 }
