@@ -93,6 +93,7 @@ final class CreateWorkoutViewModel: Identifiable {
             await MainActor.run { destination = .loading }
             try await storageService.store(workout: workout)
             await resultHandler(.created)
+            await MainActor.run { destination = nil }
         } catch {
             NSLog("Could not create workout: \(error)")
             await MainActor.run { destination = .failure }

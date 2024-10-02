@@ -13,7 +13,10 @@ final class DatabaseServiceMock: DatabaseServiceProtocol {
         Workout(id: UUID(), timestamp: Date(), type: "Bike", location: "Prague", duration: .seconds(30*60), storage: .local),
     ]
 
-    func add(_ workout: Workout) throws { }
+    var addHandler: ((_ workout: Workout) throws -> Void)?
+    func add(_ workout: Workout) throws {
+        try addHandler?(workout)
+    }
 
     func remove(_ workout: Workout) throws {  }
 
