@@ -20,7 +20,7 @@ struct CreateWorkoutView: View {
 
             TextField("Location", text: $viewModel.location)
                 .submitLabel(.done)
-                .focused($focus, equals: .workoutType)
+                .focused($focus, equals: .location)
 
             durationPicker
 

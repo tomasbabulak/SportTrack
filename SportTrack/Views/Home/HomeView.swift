@@ -92,10 +92,10 @@ struct HomeView: View {
     }
 
     private var loadingView: some View {
-        ZStack {
-            Color.black
-            ProgressView { Text("Loading data...") }
-        }
+        ProgressView { Text("Loading data...") }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(.ultraThinMaterial)
+            .ignoresSafeArea()
     }
 }
 

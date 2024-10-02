@@ -18,6 +18,11 @@ extension StorageService: DependencyKey {
         databaseService: DatabaseServiceMock(),
         networkService: NetworkServiceMock()
     )
+
+    static let testValue = StorageService(
+        databaseService: DatabaseServiceMock(),
+        networkService: NetworkServiceMock()
+    )
 }
 
 final class StorageService {
